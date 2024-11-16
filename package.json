@@ -7,8 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "auth-api": "bun swagger-typescript-api -p src/fsd/shared/api/openapi/swagger-auth.json -o src/fsd/shared/api/typed-api -n AuthApi.ts --axios",
-    "profiles-api": "bun swagger-typescript-api -p src/fsd/shared/api/openapi/swagger-profiles.json -o src/fsd/shared/api/typed-api -n ProfilesApi.ts --axios"
+    "api": "bun swagger-typescript-api -p src/fsd/shared/api/openapi/swagger-cosmogram.json -o src/fsd/shared/api/typed-api -n Cosmogram.ts --axios"
   },
   "dependencies": {
     "@astrodraw/astrochart": "^3.0.2",

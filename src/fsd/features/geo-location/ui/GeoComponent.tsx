@@ -1,14 +1,14 @@
 "use client";
 import { Input } from "@nextui-org/react";
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import { YMaps, Map } from "@pbe/react-yandex-maps";
 import axios from "axios";
 import { LOCATION } from "../model";
+import { $location, setLocation } from "../model/model";
+import { useUnit } from "effector-react";
 
 export function GeoComponentInside() {
-  const [location, setLocation] = useState<[number, number]>(
-    LOCATION.center as [number, number]
-  );
+  const location = useUnit($location);
   const cityRef = useRef("");
   const handleSearch = async () => {
     const { data } = await axios.get(
@@ -30,20 +30,6 @@ export function GeoComponentInside() {
       <Input type="text" onChange={(e) => (cityRef.current = e.target.value)} />
       <button onClick={handleSearch}>Поиск</button>
       <div style={{ width: "600px", height: "400px" }}>
-        {/* <YMap location={reactify.useDefault(LOCATION)}>
-          <YMapDefaultSchemeLayer />
-          <YMapDefaultFeaturesLayer />
-
-          <YMapMarker
-            coordinates={reactify.useDefault([37.588144, 55.733842])}
-            draggable={true}
-          >
-            <section>
-              <h1>You can drag this header</h1>
-            </section>
-          </YMapMarker>
-        </YMap> */}
-
         <div>
           My awesome application with maps!
           <Map defaultState={LOCATION} state={{ center: location, zoom: 9 }} />

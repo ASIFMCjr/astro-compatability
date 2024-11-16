@@ -9,35 +9,62 @@
  * ---------------------------------------------------------------
  */
 
-export interface RequestsRefreshTokensRequest {
-  refresh_token: string;
+/** CosmogramCreate */
+export interface CosmogramCreate {
+  /**
+   * Birth Date
+   * @format date-time
+   */
+  birth_date: string;
+  /** Latitude */
+  latitude: number;
+  /** Longitude */
+  longitude: number;
 }
 
-export interface RequestsSignInWithWalletRequest {
-  wallet_pub: string;
+/** CosmogramRead */
+export interface CosmogramRead {
+  /** Id */
+  id: number;
+  /**
+   * Date Of Birth
+   * @format date-time
+   */
+  date_of_birth: string;
+  /** Latitude */
+  latitude: number;
+  /** Longitude */
+  longitude: number;
+  /** Planets */
+  planets: Record<string, number>;
+  /** Ascendant */
+  ascendant: number;
+  /** Cusps */
+  cusps: number[];
+  /** Aspects */
+  aspects: Record<string, number | string>[];
+  /** Ic */
+  ic: number;
+  /** Ds */
+  ds: number;
+  /** Mc */
+  mc: number;
 }
 
-export interface RequestsVerifySignatureRequest {
-  signature: string;
-  wallet_pub: string;
+/** HTTPValidationError */
+export interface HTTPValidationError {
+  /** Detail */
+  detail?: ValidationError[];
 }
 
-export interface ResponseErrorResponse {
-  error: string;
-}
-
-export interface ResponseRefreshTokensResponse {
-  access_token: string;
-  refresh_token: string;
-}
-
-export interface ResponseSignInWithWalletResponse {
-  nonce: string;
-}
-
-export interface ResponseVerifySignatureResponse {
-  access_token: string;
-  refresh_token: string;
+/** ValidationError */
+export interface ValidationError {
+  /** Location */
+  loc: (string | number)[];
+  /** Message */
+  msg: string;
+  /** Error Type */
+  type: string;
 }
 
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse, HeadersDefaults, ResponseType } from "axios";
@@ -175,60 +202,23 @@ export class HttpClient<SecurityDataType = unknown> {
 }
 
 /**
- * @title No title
- * @contact
+ * @title Naimix
+ * @version 0.1.0
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
-  api = {
+  cosmogram = {
     /**
-     * @description Обновление access и refresh токенов с использованием валидного refresh токена
+     * No description
      *
-     * @tags auth
-     * @name AuthRefreshTokensCreate
-     * @summary Обновление Access и Refresh токенов
-     * @request POST:/api/auth/refresh-tokens
+     * @name CreateCosmogramCosmogramPost
+     * @summary Create Cosmogram
+     * @request POST:/cosmogram
      */
-    authRefreshTokensCreate: (refreshTokens: RequestsRefreshTokensRequest, params: RequestParams = {}) =>
-      this.request<ResponseRefreshTokensResponse, ResponseErrorResponse>({
-        path: `/api/auth/refresh-tokens`,
+    createCosmogramCosmogramPost: (data: CosmogramCreate, params: RequestParams = {}) =>
+      this.request<CosmogramRead, HTTPValidationError>({
+        path: `/cosmogram`,
         method: "POST",
-        body: refreshTokens,
-        type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * @description Авторизация пользователя с использованием его Ethereum кошелька
-     *
-     * @tags auth
-     * @name AuthSignInCreate
-     * @summary Авторизация через кошелек
-     * @request POST:/api/auth/sign-in
-     */
-    authSignInCreate: (signInWithWallet: RequestsSignInWithWalletRequest, params: RequestParams = {}) =>
-      this.request<ResponseSignInWithWalletResponse, ResponseErrorResponse>({
-        path: `/api/auth/sign-in`,
-        method: "POST",
-        body: signInWithWallet,
-        type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * @description Проверка подписи с использованием публичного ключа
-     *
-     * @tags auth
-     * @name AuthVerifySignatureCreate
-     * @summary Верификация подписи
-     * @request POST:/api/auth/verify-signature
-     */
-    authVerifySignatureCreate: (verifySignature: RequestsVerifySignatureRequest, params: RequestParams = {}) =>
-      this.request<ResponseVerifySignatureResponse, ResponseErrorResponse>({
-        path: `/api/auth/verify-signature`,
-        method: "POST",
-        body: verifySignature,
+        body: data,
         type: ContentType.Json,
         format: "json",
         ...params,
